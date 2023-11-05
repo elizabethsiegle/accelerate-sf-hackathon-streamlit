@@ -5,16 +5,16 @@ import requests
 import base64
 from base64 import b64encode
 from io import BytesIO
-from langchain.prompts import PromptTemplate
-from langchain.chains import LLMChain
 from PIL import Image
 from dotenv import load_dotenv
 from io import StringIO
 from twilio.rest import Client
-import replicate
-load_dotenv()
-st.title('better 311🫶')
 
+load_dotenv()
+st.title('311+🫶')
+image = Image.open('bridge.jpeg')
+st.image(image, caption='Golden Gate Bridge')
+# need OpenAI API Key in .env
 # Set the API endpoint and your API key
 url = "https://api.openai.com/v1/completions"
 
@@ -31,11 +31,7 @@ if st.button('Enter'):
         encoded_file = base64.encodebytes(uploaded_file.read())
         output_temporary_file = b64encode(encoded_file).decode('utf-8')
         print(output_temporary_file)
-        # encoded_image = ''
-        # with io.BytesIO() as bytesio:
-        #     image = Image.open('image.jpg')
-        #     image.save(bytesio, format='JPEG')
-        #     encoded_image = base64.encodebytes(bytesio.getvalue())
+
         # Set the request headers
         headers = {
             "Content-Type": "application/json",
@@ -67,6 +63,10 @@ if st.button('Enter'):
         account_sid = os.environ['TWILIO_ACCOUNT_SID']
         auth_token = os.environ['TWILIO_AUTH_TOKEN']
         client = Client(account_sid, auth_token)
-        
+        client.messages.create(
+            to=user_num,
+            from_="8553021845",
+            body="Got your chat message"
+        ) 
         #hit 
         requests.post('https://trigger.brox.dev/?api_key=Rcy0rczwEnxogAakhnFQ&account_id=ufoAcA4gXLcwK6GXESd8&source=chat311&event=user-submission', json={"phone_number": user_num, "location": location, "department": dept, "why": problem_input, "score": urgency_num, "image": output_temporary_file })
