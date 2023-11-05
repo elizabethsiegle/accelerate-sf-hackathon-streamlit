@@ -18,7 +18,7 @@ st.image(image, caption='Golden Gate Bridge')
 # Set the API endpoint and your API key
 url = "https://api.openai.com/v1/completions"
 
-api_key = os.environ.get('OPENAI_API_KEY')
+api_key = st.secrets['OPENAI_API_KEY'] #os.environ.get('OPENAI_API_KEY')
 
 problem_input = st.text_input('What is the problem, please') 
 uploaded_file = st.file_uploader("Upload An Image",type=['png','jpeg','jpg'])
@@ -27,6 +27,8 @@ user_num = st.text_input("Enter your phone #, please")
 if st.button('Enter'):
     if uploaded_file is not None:
         file_details = {"FileName":uploaded_file.name,"FileType":uploaded_file.type}
+        img_det = "Got the image!"
+        st.write(img_det)
         st.write(file_details)
         encoded_file = base64.encodebytes(uploaded_file.read())
         output_temporary_file = b64encode(encoded_file).decode('utf-8')
@@ -60,13 +62,14 @@ if st.button('Enter'):
         print(urgency_num)
         dept_data = department.json()
         dept = dept_data['choices'][0]['text']
-        account_sid = os.environ['TWILIO_ACCOUNT_SID']
-        auth_token = os.environ['TWILIO_AUTH_TOKEN']
+        #account_sid = os.environ['TWILIO_ACCOUNT_SID']
+        account_sid = st.secrets['TWILIO_ACCOUNT_SID']
+        auth_token = st.secrets['TWILIO_AUTH_TOKEN']
         client = Client(account_sid, auth_token)
         client.messages.create(
             to=user_num,
             from_="8553021845",
-            body="Got your chat message"
+            body="Got your chat message. Someone from the City will reach out soon."
         ) 
         #hit 
         requests.post('https://trigger.brox.dev/?api_key=Rcy0rczwEnxogAakhnFQ&account_id=ufoAcA4gXLcwK6GXESd8&source=chat311&event=user-submission', json={"phone_number": user_num, "location": location, "department": dept, "why": problem_input, "score": urgency_num, "image": output_temporary_file })
