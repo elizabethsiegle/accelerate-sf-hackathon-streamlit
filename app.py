@@ -6,7 +6,7 @@ import base64
 from base64 import b64encode
 from io import BytesIO
 from PIL import Image
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 from io import StringIO
 from twilio.rest import Client
 
