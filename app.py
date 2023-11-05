@@ -10,7 +10,7 @@ from PIL import Image
 from io import StringIO
 from twilio.rest import Client
 
-load_dotenv()
+#load_dotenv()
 st.title('311+🫶')
 image = Image.open('bridge.jpeg')
 st.image(image, caption='Golden Gate Bridge')
